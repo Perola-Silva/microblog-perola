@@ -1,4 +1,7 @@
-<?php require_once __DIR__ . '/includes/cabecalho.php'; ?>
+<?php 
+echo __DIR__;
+require_once __DIR__ . '/includes/cabecalho.php'; 
+?>
 
 <div class="row my-1 mx-md-n1">
 
