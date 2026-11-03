@@ -1,5 +1,7 @@
 <?php
 
+namespace Microblog\Helpers;
+
 use Exception;
 use InvalidArgumentException;
 use Throwable;

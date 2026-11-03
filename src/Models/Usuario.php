@@ -1,5 +1,10 @@
 <?php
 
+namespace Microblog\Models;
+
+use Microblog\Enums\Destaque;
+use Microblog\Enums\TipoUsuario;
+
 class Usuario
 {
     private int $id;
