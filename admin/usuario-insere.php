@@ -15,58 +15,77 @@ $nome = "";
 $email = "";
 $tipo = "editor"; // Valor padrão conforme formulário
 
-if($_SERVER['REQUEST_METHOD'] === "POST"){
-    // Normaliza as entradas de dados do formulario para minimizar problemas de segurança e inconsistencias
-    $nome = Utils::normalizarEntrada($_POST['nome'] ?? "");
-    $email = Utils::normalizarEntrada($_POST['email'] ?? "", 'email');
-    $senhaBruta = $_POST['senha'];
-    $tipo = Utils::normalizarEntrada($_POST['tipo'] ?? "");
+if ($_SERVER['REQUEST_METHOD'] === "POST") {
+    try {
+        // Normaliza as entradas de dados do formulario para minimizar problemas de segurança e inconsistencias
+        $nome = Utils::normalizarEntrada($_POST['nome'] ?? "");
+        $email = Utils::normalizarEntrada($_POST['email'] ?? "", 'email');
+        $senhaBruta = $_POST['senha'];
+        $tipo = Utils::normalizarEntrada($_POST['tipo'] ?? "");
 
-    // Aplicar validações aos valores os campos do formulario
-    Validacoes::validarNome($nome);
-    Validacoes::validarEmail($email);
-    Validacoes::validarSenha($senhaBruta);
-    Validacoes::validarTipo($tipo);
+        // Aplicar validações aos valores os campos do formulario
+        Validacoes::validarNome($nome);
+        Validacoes::validarEmail($email);
+        Validacoes::validarSenha($senhaBruta);
+        Validacoes::validarTipo($tipo);
 
-    // Se todas as validações passarem:
+        // Se todas as validações passarem:
 
-    // Codificar senha
-    $senha = Utils::codificarSenha($senhaBruta);
+        // Codificar senha
+        $senha = Utils::codificarSenha($senhaBruta);
 
-    // Converter a string do tipo usuario (vindo do formulario) para o ENUM
-    $tipoEnum = TipoUsuario::from($tipo);
+        // Converter a string do tipo usuario (vindo do formulario) para o ENUM
+        $tipoEnum = TipoUsuario::from($tipo);
 
-    // Criar um objeto Usuario com os dados normalizados e validados
+        // Criar um objeto Usuario com os dados normalizados e validados
 
-    $usuario = new Usuario($nome, $email, $senha, $tipoEnum);
+        $usuario = new Usuario($nome, $email, $senha, $tipoEnum);
 
-    // Criar um serviço para usuario
+        // Criar um serviço para usuario
 
-    $usuarioServico = new UsuarioServico();
+        $usuarioServico = new UsuarioServico();
 
-    // Inserir o usuario atraves do servico
+        // Inserir o usuario atraves do servico
 
-    $usuarioServico->inserir($usuario);
+        $usuarioServico->inserir($usuario);
 
-    // Redirecionar para a página usuarios.php
-    header("location:usuarios.php");
+        // Redirecionar para a página usuarios.php
+        header("location:usuarios.php");
+    } catch (InvalidArgumentException $e) {
+        // Primeiro catch para erros de validação (nome invalido, e-mail incorrero, senha inadequada, etc)
+        $mensagemErro = $e->getMessage();
+    } catch (Throwable $e) {
+        // Segundo catch para exeções e erros inesperados
+        // Registramos no log
+        Utils::registrarLog($e);
+        // Definimos uma mensagem genérica ao usuário
+        $mensagemErro = "Não foi possível cadastrar o usuário. Tente novamente";
+    }
 }
 
-require_once __DIR__ . '/../includes/cabecalho-admin.php'; 
+require_once __DIR__ . '/../includes/cabecalho-admin.php';
 
 ?>
 
 <div class="row">
     <article class="col-12 bg-white rounded shadow my-1 py-4">
         <h2 class="text-center">Inserir novo usuário</h2>
+
+        <?php if($mensagemErro !== ""): ?>
+            <div class="alert alert-danger text-center">
+                <?= Utils::escaparHtml($mensagemErro) ?>
+            </div>
+        <?php endif; ?>
+
         <form class="mx-auto w-75" action="" method="post" id="form-inserir" name="form-inserir">
+            <!-- Aplicamos o value com valores dinâmicos para garantir que os dados já digitados previamente, não sejam removidos dos campos no caso de uma falha na validação -->
             <div class="mb-3">
                 <label class="form-label" for="nome">Nome:</label>
-                <input class="form-control" type="text" id="nome" name="nome" value="Nome de exemplo">
+                <input class="form-control" type="text" id="nome" name="nome" value="<?= Utils::escaparHtml($nome) ?>">
             </div>
             <div class="mb-3">
                 <label class="form-label" for="email">E-mail:</label>
-                <input class="form-control" type="email" id="email" name="email" value="pessoa@exemplo.com">
+                <input class="form-control" type="email" id="email" name="email" value="<?= Utils::escaparHtml($email) ?>">
             </div>
             <div class="mb-3">
                 <label class="form-label" for="senha">Senha:</label>
