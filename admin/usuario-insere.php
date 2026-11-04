@@ -1,4 +1,60 @@
-<?php require_once __DIR__ . '/../includes/cabecalho-admin.php'; ?>
+<?php
+
+use Microblog\Enums\TipoUsuario;
+use Microblog\Helpers\Utils;
+use Microblog\Helpers\Validacoes;
+use Microblog\Models\Usuario;
+use Microblog\Services\UsuarioServico;
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// Inicializa variaveis para armazenar mensagens de erro e valores do formulário
+
+$mensagemErro = "";
+$nome = "";
+$email = "";
+$tipo = "editor"; // Valor padrão conforme formulário
+
+if($_SERVER['REQUEST_METHOD'] === "POST"){
+    // Normaliza as entradas de dados do formulario para minimizar problemas de segurança e inconsistencias
+    $nome = Utils::normalizarEntrada($_POST['nome'] ?? "");
+    $email = Utils::normalizarEntrada($_POST['email'] ?? "", 'email');
+    $senhaBruta = $_POST['senha'];
+    $tipo = Utils::normalizarEntrada($_POST['tipo'] ?? "");
+
+    // Aplicar validações aos valores os campos do formulario
+    Validacoes::validarNome($nome);
+    Validacoes::validarEmail($email);
+    Validacoes::validarSenha($senhaBruta);
+    Validacoes::validarTipo($tipo);
+
+    // Se todas as validações passarem:
+
+    // Codificar senha
+    $senha = Utils::codificarSenha($senhaBruta);
+
+    // Converter a string do tipo usuario (vindo do formulario) para o ENUM
+    $tipoEnum = TipoUsuario::from($tipo);
+
+    // Criar um objeto Usuario com os dados normalizados e validados
+
+    $usuario = new Usuario($nome, $email, $senha, $tipoEnum);
+
+    // Criar um serviço para usuario
+
+    $usuarioServico = new UsuarioServico();
+
+    // Inserir o usuario atraves do servico
+
+    $usuarioServico->inserir($usuario);
+
+    // Redirecionar para a página usuarios.php
+    header("location:usuarios.php");
+}
+
+require_once __DIR__ . '/../includes/cabecalho-admin.php'; 
+
+?>
 
 <div class="row">
     <article class="col-12 bg-white rounded shadow my-1 py-4">
