@@ -45,4 +45,20 @@ final class CategoriaServico
             throw new Exception("Erro ao inserir categoria");
         }
     }
+
+    public function buscarPorId(int $id): ?array
+    {
+        $sql = "SELECT * FROM categorias WHERE id = :id";
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindValue(":id", $id);
+            $consulta->execute();
+
+            return $consulta->fetch() ?: null;
+        } catch (PDOException $e) {
+            Utils::registrarLog($e);
+            throw new Exception("Erro ao buscar categoria por ID.");
+        }
+    }
 }
