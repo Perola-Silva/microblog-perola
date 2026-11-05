@@ -1,6 +1,8 @@
 <?php
 
 use Microblog\Helpers\Utils;
+use Microblog\Helpers\Validacoes;
+use Microblog\Models\Categoria;
 use Microblog\Services\CategoriaServico;
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -19,6 +21,31 @@ try {
 } catch (Throwable $e) {
     Utils::registrarLog($e);
     $mensagemErro = "Não foi possível carregar os dados do categorias";
+}
+
+if($dadosCategoria === null && $mensagemErro === ""){
+    Utils::alertaErro("Categoria não encontrada!");
+}
+
+$nome = $dadosCategoria['nome'] ?? "";
+
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    try {
+        $nome = Utils::normalizarEntrada($_POST['nome'] ?? "");
+
+        Validacoes::validarNome($nome);
+
+        $categoria = new Categoria($nome, $id);
+
+        $categoriaServico->atualizar($categoria);
+        header("location:categorias.php");
+        exit;
+    } catch (InvalidArgumentException $e) {
+        $mensagemErro = $e->getMessage();
+    } catch (Throwable $e) {
+        Utils::registrarLog($e);
+        $mensagemErro = "Não foi possível atualizar a categoria. Tente novamente";
+    }
 }
 
 require_once __DIR__ . '/../includes/cabecalho-admin.php'; 
