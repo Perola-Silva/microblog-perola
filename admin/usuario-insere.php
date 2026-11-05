@@ -51,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === "POST") {
 
         // Redirecionar para a página usuarios.php
         header("location:usuarios.php");
+        exit;
     } catch (InvalidArgumentException $e) {
         // Primeiro catch para erros de validação (nome invalido, e-mail incorrero, senha inadequada, etc)
         $mensagemErro = $e->getMessage();
