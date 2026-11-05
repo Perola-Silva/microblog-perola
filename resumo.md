@@ -1,26 +1,33 @@
-# Resumo do histórico da branch
+# Resumo das atualizações da branch
 
-**Branch analisada:** `02_aula0411`  
-**Período do histórico:** 03 a 04/11/2026  
-**Referência mais recente:** `a94e248` — preenchimento do formulário de edição com os dados da conta.
+**Branch:** `03_aula0511`
+**Base:** `02_aula0411` (`2ca9964`)
+**Atualizações desta branch:** 05/11/2026
+**Commit mais recente:** `f33d443` — atualização de `erros.log`
 
-## Principais pontos trabalhados
+## Contexto do projeto
 
-1. **Estrutura inicial do Microblog**  
-   O projeto foi iniciado como um portal didático de notícias em PHP, com área pública, painel administrativo, páginas de notícias e categorias, recursos visuais e scripts auxiliares. Também foram incluídos materiais de apoio, modelos iniciais, utilitários, validações, conexão PDO e arquivos SQL para o banco de dados.
+O Microblog é um portal de notícias didático desenvolvido em PHP com orientação a objetos e MySQL/MariaDB via PDO. O projeto possui uma área pública para consulta, busca e visualização de notícias e um painel administrativo para gerenciamento do conteúdo e das contas.
 
-2. **Organização do código e autoload**  
-   Foi configurado o autoload PSR-4 do Composer e organizados namespaces para enums, helpers e modelos (`Categoria`, `Noticia` e `Usuario`).
+## Funcionalidades desenvolvidas até esta branch
 
-3. **Serviço e listagem de usuários**  
-   Foi criado o `UsuarioServico`, com acesso ao banco via PDO e operações para listar usuários. A tela administrativa passou de conteúdo estático para dados carregados do serviço; também foram adicionados tratamento e registro de erros.
+- Autoload PSR-4 com Composer e organização do código em enums, helpers, modelos e serviços.
+- Listagem de usuários no painel administrativo.
+- Cadastro de usuários, com normalização e validação dos dados, hash de senha e tratamento de erros.
+- Busca de usuário pelo ID e preenchimento do formulário de edição com os dados existentes.
+- Atualização de usuários pelo formulário administrativo, incluindo persistência de nome, e-mail, senha e tipo de usuário.
 
-4. **Cadastro de usuários**  
-   O serviço passou a inserir usuários. O modelo `Usuario` foi ajustado para permitir identificador opcional e nulo, adequado a novos registros. O formulário administrativo foi ligado ao fluxo de cadastro, com normalização e validação dos dados, codificação da senha, conversão do tipo de usuário e mensagens de erro.
+## Mudanças desta branch
 
-5. **Busca e edição de usuários**  
-   Foi adicionada ao serviço a busca de usuário por ID. A página de atualização passou a carregar os dados da conta e preencher o formulário com os valores existentes.
+1. **Implementação da atualização de usuários**
+   O serviço `UsuarioServico` ganhou o método `atualizar`, que executa a instrução `UPDATE` no banco de dados e registra erros de persistência.
 
-## Situação indicada pelo histórico
+2. **Processamento e validação do formulário**
+   A página `admin/usuario-atualiza.php` agora processa envios `POST`, normaliza e valida nome, e-mail e tipo de usuário, instancia o modelo `Usuario` e chama o serviço para salvar as alterações. Em caso de sucesso, redireciona para a listagem de usuários; erros de validação são apresentados e outros erros são registrados no log.
 
-Até o commit mais recente, estão implementadas a listagem e a inserção de usuários, além do carregamento de dados para o formulário de atualização. O histórico consultado ainda não registra a gravação da atualização nem a exclusão de usuários. Essas funcionalidades podem estar pendentes ou não ter sido incluídas nesta branch.
+3. **Tratamento da senha**
+   Se o campo de senha ficar vazio, a senha atual é mantida. Se for preenchido, a nova senha é validada e processada antes de ser salva.
+
+## Situação ao final da branch
+
+A área administrativa já permite listar, cadastrar, consultar para edição e atualizar usuários. A exclusão de usuários não aparece implementada no histórico desta branch.
