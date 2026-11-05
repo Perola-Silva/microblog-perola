@@ -86,8 +86,10 @@ final class UsuarioServico
             $consulta->bindValue(":nome", $usuario->getNome());
             $consulta->bindValue(":email", $usuario->getEmail());
             $consulta->bindValue(":senha", $usuario->getSenha());
-            $consulta->bindValue(":tipo", $usuario->getTipoUsuario());
+            $consulta->bindValue(":tipo", $usuario->getTipoUsuario()->value);
             $consulta->bindValue(":id", $usuario->getId());
+
+            $consulta->execute();
         } catch (PDOException $e) {
             Utils::registrarLog($e);
             throw new Exception("Erro ao atualizar usuário");
