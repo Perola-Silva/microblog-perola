@@ -29,4 +29,20 @@ final class CategoriaServico
             throw new Exception("Erro ao listar as categorias");
         }
     }
+
+    public function inserir(Categoria $categoria): void
+    {
+        $sql = "INSERT INTO categorias (nome) VALUES (:nome)";
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+
+            $consulta->bindValue("nome", $categoria->getNome());
+
+            $consulta->execute();
+        } catch (PDOException $e) {
+            Utils::registrarLog($e);
+            throw new Exception("Erro ao inserir categoria");
+        }
+    }
 }
