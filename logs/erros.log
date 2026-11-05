@@ -1,5 +1,0 @@
-[2026-11-05 09:24:14]
-Arquivo: C:\backend\microblog_perola\microblog-perola\src\Services\UsuarioServico.php
-Linha: 89
-Mensagem: Object of class Microblog\Enums\TipoUsuario could not be converted to string
-
