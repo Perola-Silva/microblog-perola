@@ -16,8 +16,6 @@ try {
     $mensagemErro = "Não foi possível carregar a lista de categorias";
 }
 
-Utils::dump($listaDeCategorias);
-
 require_once __DIR__ . '/../includes/cabecalho-admin.php'; 
 
 ?>
