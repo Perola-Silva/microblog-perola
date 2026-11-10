@@ -24,7 +24,7 @@ require_once __DIR__ . '/../includes/cabecalho-admin.php';
 
 <div class="row">
     <article class="col-12 bg-white rounded shadow my-1 py-4">
-        <h2 class="text-center">Categorias <span class="badge bg-dark">2</span></h2>
+        <h2 class="text-center">Categorias <span class="badge bg-dark"><?= count($listaDeCategorias) ?></span></h2>
 
         <?php if($mensagemErro !== ""): ?>
             <div class="alert alert-danger text-center">

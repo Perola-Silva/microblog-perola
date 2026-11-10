@@ -48,7 +48,7 @@ require_once __DIR__ . '/../includes/cabecalho-admin.php';
         <form class="mx-auto w-75" action="" method="post" id="form-inserir" name="form-inserir">
             <div class="mb-3">
                 <label class="form-label" for="nome">Nome:</label>
-                <input class="form-control" type="text" id="nome" name="nome" value="Nome provisório">
+                <input class="form-control" type="text" id="nome" name="nome" value="<?= Utils::escaparHtml($nome) ?>">
             </div>
             <button class="btn btn-primary" id="inserir" name="inserir"><i class="bi bi-save"></i> Inserir</button>
         </form>
