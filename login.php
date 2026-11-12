@@ -1,5 +1,6 @@
 <?php
 
+use Microblog\Auth\ControleDeAcesso;
 use Microblog\Helpers\Utils;
 use Microblog\Services\UsuarioServico;
 
@@ -38,9 +39,23 @@ if($_SERVER['REQUEST_METHOD'] === 'POST'){
         // Buscando o usuário no banco atraves do e-mail
         $usuarioServico = new UsuarioServico();
         $usuario = $usuarioServico->buscarPorEmail($email);
+
+        //Verificar senha
+        if(!$usuario || !password_verify($senhaRecebida, $usuario['senha'])){
+            header("location:login.php?dados_incorretos");
+            exit;
+        }
+
+        // Usuario existe e senha correta faz o processso de login
+        ControleDeAcesso::login($usuario['id'], $usuario['nome'], $usuario['tipo']);
+
+        // E redireciona para a pagina admin/index
+        header("location:admin/index.php");
+        exit;
     } catch (Throwable $e) {
         Utils::registrarLog($e);
         header("location:login.php?erro");
+        exit;
     }
 }
 
