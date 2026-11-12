@@ -2,6 +2,8 @@
 
 namespace Microblog\Auth;
 
+use Microblog\Enums\TipoUsuario;
+
 /* Sessões no PHP
 Funcionalidade usada para controlar o acesso a determinadas páginas e recursos de um site/aplicação
 
@@ -61,5 +63,13 @@ final class ControleDeAcesso
         self::iniciarSessao();
         self::encerrarSessao();
         header("location:../login.php?logout");
+    }
+
+    public static function usuarioEhAdmin(): bool
+    {
+        self::iniciarSessao();
+        // Se variavel de sesão for 'tipo' existe e o valor dela é 'admin'
+        // Então significa que o usuario logado é um administrador
+        return isset($_SESSION['tipo']) && $_SESSION['tipo'] === TipoUsuario::ADMIN->value;
     }
 }
