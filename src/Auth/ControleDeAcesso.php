@@ -69,7 +69,20 @@ final class ControleDeAcesso
     {
         self::iniciarSessao();
         // Se variavel de sesão for 'tipo' existe e o valor dela é 'admin'
-        // Então significa que o usuario logado é um administrador
+        // Então significa que o usuario logado é um
         return isset($_SESSION['tipo']) && $_SESSION['tipo'] === TipoUsuario::ADMIN->value;
+    }
+
+    public static function exigirAdmin(): void
+    {
+        // VErifica se está logado
+        self::exigirLogin();
+
+        // verifica se não é um admin
+        if(!self::usuarioEhAdmin()){
+            // não sendo, manda para pagina não autorizado
+            header("location:nao-autorizado.php");
+            exit;
+        }
     }
 }
