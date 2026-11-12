@@ -1,9 +1,12 @@
-<?php 
+<?php
 
+use Microblog\Auth\ControleDeAcesso;
 use Microblog\Helpers\Utils;
 use Microblog\Services\CategoriaServico;
 
 require_once __DIR__ . '/../vendor/autoload.php';
+
+ControleDeAcesso::exigirAdmin();
 
 $mensagemErro = "";
 $listaDeCategorias = [];
