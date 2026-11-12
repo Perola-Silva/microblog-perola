@@ -11,6 +11,10 @@ ControleDeAcesso::exigirAdmin();
 $id = Utils::normalizarEntrada($_GET['id'] ?? null, 'inteiro');
 Utils::verificarId($id);
 
+if($id === $_SESSION['id']){
+    Utils::alertaErro("Não é possível excluir a propria conta.");
+}
+
 try {
     $categoria =  new UsuarioServico;
     $categoria->excluir($id);
