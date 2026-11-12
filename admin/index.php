@@ -8,6 +8,11 @@ require_once __DIR__ . '/../includes/cabecalho-admin.php'; ?>
 <article class="p-5 my-4 rounded-3 bg-white shadow">
     <div class="container-fluid py-1">
         <h2 class="display-4">Olá, <?= Utils::escaparHtml($_SESSION['nome']) ?></h2>
+
+        <?php if(isset($_GET['perfil_atualizado'])): ?>
+            <p class="alert alert-primary">Dados atualizados com sucesso!</p>
+        <?php endif ?>
+
         <p class="fs-5">Você está no <b>painel de controle e administração</b> do site Microblog e seu <b>nível de acesso</b> é <span class="badge bg-dark"></span><?= Utils::escaparHtml($_SESSION['tipo']) ?></p>
         <hr class="my-4">
         <div class="d-grid gap-2 d-md-block text-center">

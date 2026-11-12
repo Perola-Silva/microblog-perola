@@ -32,6 +32,45 @@ if($dadosUsuario === null && $mensagemErro === ""){
 $nome = $dadosUsuario['nome'] ?? "";
 $email = $dadosUsuario['email'] ?? "";
 
+if($_SERVER["REQUEST_METHOD"] === "POST"){
+    try{
+        $nome = Utils::normalizarEntrada($_POST['nome'] ?? "");
+        $email = Utils::normalizarEntrada($_POST['email'] ?? "", 'email'); 
+
+        Validacoes::validarNome($nome);
+        Validacoes::validarEmail($email);
+
+        // O tipo de usuario não é capturado do formulario
+        // usamos o valor atual do banco ou sessão
+        $tipoEnum = TipoUsuario::from($dadosUsuario['tipo']); // ou $_SESSION['tipo']
+
+        $senhaBruta = $_POST['senha'] ?? '';
+
+        if($senhaBruta === ""){
+            $senha = $dadosUsuario['senha'];
+        }else{
+            Validacoes::validarSenha($senhaBruta);
+            $senha = Utils::verificarSenha($senhaBruta, $dadosUsuario['senha']);
+        }
+
+        $usuario = new Usuario($nome, $email, $senha, $tipoEnum, $id);
+
+        $usuarioServico->atualizar($usuario);
+
+        // Mostrando o nome atualizado em caso de alteração
+
+        $_SESSION['nome'] = $nome;
+
+        header("location:index?perfil_atualizado.php");
+        exit;
+    }catch(InvalidArgumentException $e){
+        $mensagemErro = $e->getMessage();
+    }catch(Throwable $e){
+        Utils::registrarLog($e);
+        $mensagemErro = "Não foi possível atualizar o usuário. Tente novamente";
+    }
+}
+
 require_once __DIR__ . '/../includes/cabecalho-admin.php'; 
 
 ?>
