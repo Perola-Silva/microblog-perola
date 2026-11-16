@@ -18,6 +18,7 @@ Utils::verificarId($id);
 
 $mensagemErro = "";
 $dadosNoticia = null;
+$tipoUsuario = null;
 $listaDeCategorias = [];
 $categoriasCarregadas = false;
 $usuarioId = (int) $_SESSION['id'];
