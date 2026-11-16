@@ -73,3 +73,15 @@ Agora impemente o metodo atualiza na pagina admin/noticia-atualiza.php
 ### 8. Registro dos prompts
 
 atualize o arquivo prompts.md para adicionar todos os prompts desta conversa
+
+### 9. Método de exclusão de notícia
+
+Com base nos metodos de classes anteriores crie o metodo excluir no arquivo NoticiaServico, não implemente a exclusão ainda, aguarde o proximo comando
+
+### 10. Página de exclusão de notícia
+
+na pasta admin modifique o arquivo noticia-exclui.php, usando a mesma estrutura dos arquivos de exclusão anteriores como o categoria-exclui.php
+
+### 11. Atualização do registro de prompts
+
+insisra os prompts utilizados no arquivo prompt.md

@@ -110,7 +110,7 @@ final class NoticiaServico
         }        
     }
 
-    public function atualizar(Noticia $noticia): void
+    public function atualizar(TipoUsuario $tipoUsuario, int $usuarioId, Noticia $noticia): void
     {
         $sql = "UPDATE noticias
                 SET titulo = :titulo,
@@ -121,6 +121,10 @@ final class NoticiaServico
                     categoria_id = :categoria_id
                 WHERE id = :id";
 
+        if ($tipoUsuario !== TipoUsuario::ADMIN) {
+            $sql .= " AND usuario_id = :usuario_id";
+        }
+
         try {
             $consulta = $this->conexao->prepare($sql);
             $consulta->bindValue(":titulo", $noticia->getTitulo());
@@ -130,10 +134,38 @@ final class NoticiaServico
             $consulta->bindValue(":destaque", $noticia->getDestaque()->value);
             $consulta->bindValue(":categoria_id", $noticia->getCategoriaId());
             $consulta->bindValue(":id", $noticia->getId());
+
+            if ($tipoUsuario !== TipoUsuario::ADMIN) {
+                $consulta->bindValue(":usuario_id", $usuarioId);
+            }
+
             $consulta->execute();
         } catch (PDOException $e) {
             Utils::registrarLog($e);
             throw new Exception("Erro ao atualizar notícia");
+        }
+    }
+
+    public function excluir(TipoUsuario $tipoUsuario, int $usuarioId, int $noticiaId): void
+    {
+        $sql = "DELETE FROM noticias WHERE id = :noticia_id";
+
+        if ($tipoUsuario !== TipoUsuario::ADMIN) {
+            $sql .= " AND usuario_id = :usuario_id";
+        }
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindValue(":noticia_id", $noticiaId);
+
+            if ($tipoUsuario !== TipoUsuario::ADMIN) {
+                $consulta->bindValue(":usuario_id", $usuarioId);
+            }
+
+            $consulta->execute();
+        } catch (PDOException $e) {
+            Utils::registrarLog($e);
+            throw new Exception("Erro ao excluir notícia");
         }
     }
 }

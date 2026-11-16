@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $dadosNoticia !== null && $categori
             $dadosNoticia['data']
         );
 
-        $noticiaServico->atualizar($noticia);
+        $noticiaServico->atualizar($tipoUsuario, $usuarioId, $noticia);
 
         header("location:noticias.php");
         exit;
