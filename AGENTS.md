@@ -77,7 +77,7 @@ As referências da notícia para usuário e categoria aceitam `NULL`; as chaves 
 - `NoticiaServico::listarTodos()` lista todas as notícias com autor para administradores e somente as notícias do usuário corrente para editores. `NoticiaServico::inserir()` grava uma notícia.
 - `Noticia` representa título, texto, resumo, imagem, destaque, autor, categoria e, opcionalmente, ID e data. `Validacoes` valida campos relacionados a notícias; `Utils::upload()` valida e salva imagens em `images/`.
 - O cadastro administrativo de notícias carrega categorias, valida os dados e faz upload da imagem.
-- **A edição e exclusão de notícias ainda não estão implementadas:** `NoticiaServico::buscarPorId()` carrega uma notícia pelo ID para administradores e restringe editores às próprias notícias; `admin/noticia-atualiza.php` exibe os dados carregados e todas as categorias, mas ainda não salva alterações. `NoticiaServico` não implementa atualização ou exclusão e `admin/noticia-exclui.php` é um placeholder.
+- `NoticiaServico::buscarPorId()` carrega uma notícia pelo ID para administradores e restringe editores às próprias notícias; `NoticiaServico::atualizar()` grava os campos editáveis da notícia usando seu ID. `admin/noticia-atualiza.php` valida e salva o formulário, preservando a imagem atual quando não há novo upload. A exclusão ainda não está implementada e `admin/noticia-exclui.php` é um placeholder.
 - As páginas públicas `index.php`, `noticia.php`, `noticias-por-categoria.php`, `resultados.php` e o bloco `includes/todas.php` ainda exibem conteúdo provisório. `js/busca.js` também não tem integração funcional de busca.
 - `admin/js/confirm.js` implementa confirmação visual para links `.excluir`; isso não substitui validação/autorização no servidor.
 

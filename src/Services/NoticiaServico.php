@@ -18,6 +18,7 @@ final class NoticiaServico
         $this->conexao = ConexaoBD::getConexao();
     }
 
+
     public function listarTodos(TipoUsuario $tipoUsuario, int $usuarioId): array
     {
         if ($tipoUsuario === TipoUsuario::ADMIN) {
@@ -107,5 +108,32 @@ final class NoticiaServico
             Utils::registrarLog($e);
             throw new Exception("Erro ao inserir notícia");
         }        
+    }
+
+    public function atualizar(Noticia $noticia): void
+    {
+        $sql = "UPDATE noticias
+                SET titulo = :titulo,
+                    texto = :texto,
+                    resumo = :resumo,
+                    imagem = :imagem,
+                    destaque = :destaque,
+                    categoria_id = :categoria_id
+                WHERE id = :id";
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindValue(":titulo", $noticia->getTitulo());
+            $consulta->bindValue(":texto", $noticia->getTexto());
+            $consulta->bindValue(":resumo", $noticia->getResumo());
+            $consulta->bindValue(":imagem", $noticia->getImagem());
+            $consulta->bindValue(":destaque", $noticia->getDestaque()->value);
+            $consulta->bindValue(":categoria_id", $noticia->getCategoriaId());
+            $consulta->bindValue(":id", $noticia->getId());
+            $consulta->execute();
+        } catch (PDOException $e) {
+            Utils::registrarLog($e);
+            throw new Exception("Erro ao atualizar notícia");
+        }
     }
 }
