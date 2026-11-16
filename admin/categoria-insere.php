@@ -13,29 +13,26 @@ ControleDeAcesso::exigirAdmin();
 $mensagemErro = "";
 $nome = "";
 
-if($_SERVER['REQUEST_METHOD'] === 'POST'){
+if ($_SERVER['REQUEST_METHOD'] === "POST") {
     try {
-        $nome = Utils::normalizarEntrada($_POST['nome'] ?? "");
-
+        $nome = Utils::normalizarEntrada($_POST['nome'] ?? '');
         Validacoes::validarNome($nome);
 
         $categoria = new Categoria($nome);
-
         $categoriaServico = new CategoriaServico();
-
         $categoriaServico->inserir($categoria);
+
         header("location:categorias.php");
         exit;
     } catch (InvalidArgumentException $e) {
         $mensagemErro = $e->getMessage();
-    } catch (Throwable $e) {
+    } catch (Throwable $e){
         Utils::registrarLog($e);
-        $mensagemErro = "Não foi possível cadastrar a categoria. Tente novamente";
+        $mensagemErro = "Não foi possível cadastrar a categoria. Tente novamente.";
     }
 }
 
 require_once __DIR__ . '/../includes/cabecalho-admin.php'; 
-
 ?>
 
 <div class="row">
@@ -51,7 +48,8 @@ require_once __DIR__ . '/../includes/cabecalho-admin.php';
         <form class="mx-auto w-75" action="" method="post" id="form-inserir" name="form-inserir">
             <div class="mb-3">
                 <label class="form-label" for="nome">Nome:</label>
-                <input class="form-control" type="text" id="nome" name="nome" value="<?= Utils::escaparHtml($nome) ?>">
+                <input class="form-control" type="text" id="nome" name="nome" 
+                value="<?= Utils::escaparHtml($nome) ?>">
             </div>
             <button class="btn btn-primary" id="inserir" name="inserir"><i class="bi bi-save"></i> Inserir</button>
         </form>

@@ -1,5 +1,4 @@
 <?php
-
 namespace Microblog\Enums;
 
 enum Destaque:string {

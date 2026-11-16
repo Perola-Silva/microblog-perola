@@ -12,7 +12,7 @@ $id = Utils::normalizarEntrada($_GET['id'] ?? null, 'inteiro');
 Utils::verificarId($id);
 
 try {
-    $categoria =  new CategoriaServico;
+    $categoria = new CategoriaServico();
     $categoria->excluir($id);
     header("location:categorias.php");
     exit;
@@ -20,3 +20,6 @@ try {
     Utils::registrarLog($e);
     Utils::alertaErro("Não foi possível excluir a categoria. Tente novamente");
 }
+
+
+

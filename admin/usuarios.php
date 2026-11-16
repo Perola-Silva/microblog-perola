@@ -4,7 +4,7 @@ use Microblog\Auth\ControleDeAcesso;
 use Microblog\Helpers\Utils;
 use Microblog\Services\UsuarioServico;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . "/../vendor/autoload.php";
 
 ControleDeAcesso::exigirAdmin();
 
@@ -14,21 +14,26 @@ $listaDeUsuarios = [];
 try {
     $usuarioServico = new UsuarioServico();
     $listaDeUsuarios = $usuarioServico->listarTodos();
-} catch(Throwable $e) {
-    // Usamos Thowable para capturar tanto situações de Exception quanto de Error
+} catch(Throwable $e){
+    // Usamos Throwable para capturar tanto situações de Exception quanto de Error
+    
     // Registramos o erro no log para análise do programador
     Utils::registrarLog($e);
-    // Definimos uma mensagem genérica para exiber no front-end
+
+    // Definimos uma mensagem genérica para exibir no Front-End
     $mensagemErro = "Não foi possível carregar a lista de usuários";
 }
 
-require_once __DIR__ . '/../includes/cabecalho-admin.php'; 
+// Utils::dump($listaDeUsuarios);
 
+require_once __DIR__ . '/../includes/cabecalho-admin.php'; 
 ?>
 
 <div class="row">
     <article class="col-12 bg-white rounded shadow my-1 py-4">
-        <h2 class="text-center">Usuários <span class="badge bg-dark"><?= count($listaDeUsuarios) ?></span></h2>
+        <h2 class="text-center">Usuários 
+            <span class="badge bg-dark"><?= count($listaDeUsuarios) ?></span>
+        </h2>
 
         <?php if($mensagemErro !== ""): ?>
             <div class="alert alert-danger text-center">
@@ -54,19 +59,19 @@ require_once __DIR__ . '/../includes/cabecalho-admin.php';
                     </tr>
                 </thead>
                 <tbody>
-
-                <?php foreach($listaDeUsuarios as $itemUsuario): ?>
+<?php foreach($listaDeUsuarios as $itemUsuario): ?>
                     <tr>
-                        <td><?= Utils::escaparHtml($itemUsuario['nome']) ?></td>
-                        <td><?= Utils::escaparHtml($itemUsuario['email']) ?></td>
-                        <td><?= Utils::escaparHtml($itemUsuario['tipo']) ?></td>
+                        <td> <?= Utils::escaparHtml($itemUsuario['nome']) ?> </td>
+                        <td> <?= Utils::escaparHtml($itemUsuario['email']) ?> </td>
+                        <td> <?= Utils::escaparHtml($itemUsuario['tipo']) ?> </td>
                         <td class="text-center">
-                            <a class="btn btn-warning" href="usuario-atualiza.php?id=<?= $itemUsuario['id'] ?>"><i class="bi bi-pencil"></i> Atualizar</a>
-                            <a class="btn btn-danger excluir" href="usuario-exclui.php?id=<?= $itemUsuario['id'] ?>"><i class="bi bi-trash"></i> Excluir</a>
+                            <a class="btn btn-warning" 
+                            href="usuario-atualiza.php?id=<?= Utils::escaparHtml($itemUsuario['id']) ?>"><i class="bi bi-pencil"></i> Atualizar</a>
+                            <a class="btn btn-danger excluir"
+                             href="usuario-exclui.php?id=<?= Utils::escaparHtml($itemUsuario['id']) ?>"><i class="bi bi-trash"></i> Excluir</a>
                         </td>
                     </tr>
-                <?php endforeach; ?>
-
+<?php endforeach; ?>                    
                 </tbody>
             </table>
         </div>

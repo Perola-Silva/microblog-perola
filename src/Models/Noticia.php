@@ -1,13 +1,12 @@
 <?php
-
 namespace Microblog\Models;
 
 use Microblog\Enums\Destaque;
 
 final class Noticia
 {
-    private int $id;
-    private string $data;
+    private ?int $id;
+    private ?string $data;
     private string $titulo;
     private string $texto;
     private string $resumo;
@@ -24,8 +23,8 @@ final class Noticia
         Destaque $destaque,
         int $usuarioId,
         int $categoriaId,
-        int $id,
-        string $data
+        ?int $id = null,
+        ?string $data = null
     ) {
         $this->titulo = $titulo;
         $this->texto = $texto;

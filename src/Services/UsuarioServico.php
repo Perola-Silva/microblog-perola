@@ -12,38 +12,44 @@ final class UsuarioServico
 {
     private PDO $conexao;
 
-    /* Ao criar um objeto UsuarioServico, o construtor fica responsavel por chamar/executar a conexão com o banco de dados (proveniente do metodo estático getConexao).
-    Os dados da conexão ficarão guardados na propriedade conexão. */
+    /* Ao criar um objeto UsuarioServico,
+    o construtor fica responsável por chamar/executar
+    a conexão com o banco de dados 
+    (proveniente do método estático getConexao). 
+    Os dados da conexão ficarão guardados na propriedade conexao. */
     public function __construct()
     {
         $this->conexao = ConexaoBD::getConexao();
     }
 
-    public function listarTodos(): array
+    public function listarTodos():array
     {
         $sql = "SELECT id, nome, email, tipo FROM usuarios ORDER BY nome";
 
         try {
             $consulta = $this->conexao->query($sql);
             return $consulta->fetchAll();
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             // Registrar/logar os detalhes do erro em logs/erro.log
             Utils::registrarLog($e);
 
-            // Lançando uma mensagem de arro amigável (sem detalhes)
+            // Lançando uma mensagem de erro amigável (sem detalhes)
             // Essa mensagem será posteriormente capturada e exibida no Front-End
-            throw new Exception("Erro ao listar os usuários");
+            throw new Exception("Erro ao listar usuários");
         }
     }
 
     public function inserir(Usuario $usuario): void
     {
-        $sql = "INSERT INTO usuarios (nome, email, senha, tipo) VALUES (:nome, :email,:senha, :tipo)";
+        $sql = "INSERT INTO usuarios (nome, email, senha, tipo)
+                VALUES(:nome, :email, :senha, :tipo)";
 
         try {
-            // Repare abaixo o acesso aos dados do objeto $usuario a través de seus getters. No caso do getTipoUsuario, como se trata de uma ENUM, acessamos seu valor usando ->value
-
             $consulta = $this->conexao->prepare($sql);
+
+            /* Repare abaixo o acesso aos dados do objeto $usuario
+            através de seus getters. No caso do getTipoUsuario, como
+            se trata de uma ENUM, acessamos seu valor usando -> value */
 
             $consulta->bindValue(":nome", $usuario->getNome());
             $consulta->bindValue(":email", $usuario->getEmail());
@@ -51,7 +57,7 @@ final class UsuarioServico
             $consulta->bindValue(":tipo", $usuario->getTipoUsuario()->value);
 
             $consulta->execute();
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             Utils::registrarLog($e);
             throw new Exception("Erro ao inserir usuário");
         }
@@ -66,11 +72,11 @@ final class UsuarioServico
             $consulta->bindValue(":id", $id);
             $consulta->execute();
 
-            // Ternário conciso/abreviado (se for TRUE, retorna ele mesmo senão null)
+            // Ternário conciso/abreviado (se fetch for TRUE, retorna ele mesmo; senão null)
             return $consulta->fetch() ?: null;
-
-            //Ternário tradicional
-            // return $consulta->fetch() ? $consulta->fetch() : null;
+            
+            // Usando ternário tradicional (faz a mesma coisa)
+            // return $consulta->fetch() ? $consulta->fetch() : null; 
         } catch (PDOException $e) {
             Utils::registrarLog($e);
             throw new Exception("Erro ao buscar usuário por ID.");
@@ -79,7 +85,9 @@ final class UsuarioServico
 
     public function atualizar(Usuario $usuario): void
     {
-        $sql = "UPDATE usuarios SET nome = :nome, email = :email, senha = :senha,  tipo = :tipo WHERE id = :id";
+        $sql = "UPDATE usuarios 
+                    SET nome = :nome, email = :email, senha = :senha, tipo = :tipo
+                    WHERE id = :id";
 
         try {
             $consulta = $this->conexao->prepare($sql);
@@ -88,7 +96,6 @@ final class UsuarioServico
             $consulta->bindValue(":senha", $usuario->getSenha());
             $consulta->bindValue(":tipo", $usuario->getTipoUsuario()->value);
             $consulta->bindValue(":id", $usuario->getId());
-
             $consulta->execute();
         } catch (PDOException $e) {
             Utils::registrarLog($e);
@@ -96,16 +103,17 @@ final class UsuarioServico
         }
     }
 
-    public function excluir(int $id): void {
+    public function excluir(int $id):void
+    {
         $sql = "DELETE FROM usuarios WHERE id = :id";
-
+        
         try {
             $consulta = $this->conexao->prepare($sql);
             $consulta->bindValue(":id", $id);
             $consulta->execute();
         } catch (PDOException $e) {
             Utils::registrarLog($e);
-            throw new Exception("Erro ao excluir usuario");
+            throw new Exception("Erro ao excluir usuário");
         }
     }
 

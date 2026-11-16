@@ -1,5 +1,4 @@
 <?php
-
 namespace Microblog\Helpers;
 
 use Exception;

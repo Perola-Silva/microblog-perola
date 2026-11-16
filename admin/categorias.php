@@ -1,10 +1,9 @@
-<?php
+<?php 
+require_once __DIR__ . '/../vendor/autoload.php';
 
 use Microblog\Auth\ControleDeAcesso;
 use Microblog\Helpers\Utils;
 use Microblog\Services\CategoriaServico;
-
-require_once __DIR__ . '/../vendor/autoload.php';
 
 ControleDeAcesso::exigirAdmin();
 
@@ -20,12 +19,13 @@ try {
 }
 
 require_once __DIR__ . '/../includes/cabecalho-admin.php'; 
-
 ?>
 
 <div class="row">
     <article class="col-12 bg-white rounded shadow my-1 py-4">
-        <h2 class="text-center">Categorias <span class="badge bg-dark"><?= count($listaDeCategorias) ?></span></h2>
+        <h2 class="text-center">Categorias 
+            <span class="badge bg-dark"><?= count($listaDeCategorias) ?></span>
+        </h2>
 
         <?php if($mensagemErro !== ""): ?>
             <div class="alert alert-danger text-center">
@@ -49,15 +49,20 @@ require_once __DIR__ . '/../includes/cabecalho-admin.php';
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach($listaDeCategorias as $itemCategoria): ?>
+
+                <?php foreach($listaDeCategorias as $itemCategoria): ?>
                     <tr>
-                        <td><?= Utils::escaparHtml($itemCategoria['nome']) ?></td>
+                        <td> <?= Utils::escaparHtml($itemCategoria['nome']) ?> </td>
                         <td class="text-center">
-                            <a class="btn btn-warning" href="categoria-atualiza.php?id=<?= $itemCategoria['id'] ?>"><i class="bi bi-pencil"></i> Atualizar</a>
-                            <a class="btn btn-danger excluir" href="categoria-exclui.php?id=<?= $itemCategoria['id'] ?>"><i class="bi bi-trash"></i> Excluir</a>
+<a class="btn btn-warning" 
+href="categoria-atualiza.php?id=<?= Utils::escaparHtml($itemCategoria['id']) ?>"><i class="bi bi-pencil"></i> Atualizar</a>
+<a class="btn btn-danger excluir" 
+href="categoria-exclui.php?id=<?= Utils::escaparHtml($itemCategoria['id']) ?>"><i class="bi bi-trash"></i> Excluir</a>
                         </td>
                     </tr>
-                    <?php endforeach; ?>
+                <?php endforeach; ?>
+                    
+                    
                 </tbody>
             </table>
         </div>
