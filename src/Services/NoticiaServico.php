@@ -1,4 +1,5 @@
 <?php
+
 namespace Microblog\Services;
 
 use Exception;
@@ -86,12 +87,32 @@ final class NoticiaServico
         }
     }
 
+    public function listarPorCategoria(int $categoriaId): array
+    {
+        $sql = "SELECT noticias.id, noticias.data, noticias.titulo, noticias.resumo,
+                        usuarios.nome AS autor
+                FROM noticias
+                LEFT JOIN usuarios ON noticias.usuario_id = usuarios.id
+                WHERE noticias.categoria_id = :categoria_id
+                ORDER BY noticias.data DESC";
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindValue(":categoria_id", $categoriaId);
+            $consulta->execute();
+            return $consulta->fetchAll();
+        } catch (PDOException $e) {
+            Utils::registrarLog($e);
+            throw new Exception("Erro ao listar notícias por categoria");
+        }
+    }
+
     public function buscarPorId(TipoUsuario $tipoUsuario, int $usuarioId, int $noticiaId): ?array
     {
         $sql = "SELECT noticias.id, noticias.data, noticias.titulo, noticias.texto,
-                       noticias.resumo, noticias.imagem, noticias.destaque,
-                       noticias.usuario_id, noticias.categoria_id,
-                       usuarios.nome AS autor
+                        noticias.resumo, noticias.imagem, noticias.destaque,
+                        noticias.usuario_id, noticias.categoria_id,
+                        usuarios.nome AS autor
                 FROM noticias
                 LEFT JOIN usuarios ON noticias.usuario_id = usuarios.id
                 WHERE noticias.id = :noticia_id";
@@ -119,7 +140,7 @@ final class NoticiaServico
     public function buscarPublicaPorId(int $noticiaId): ?array
     {
         $sql = "SELECT noticias.id, noticias.data, noticias.titulo, noticias.texto,
-                       noticias.imagem, usuarios.nome AS autor
+                        noticias.imagem, usuarios.nome AS autor
                 FROM noticias
                 LEFT JOIN usuarios ON noticias.usuario_id = usuarios.id
                 WHERE noticias.id = :noticia_id";
@@ -155,11 +176,10 @@ final class NoticiaServico
             $consulta->bindValue(":categoria_id", $noticia->getCategoriaId());
 
             $consulta->execute();
-
         } catch (PDOException $e) {
             Utils::registrarLog($e);
             throw new Exception("Erro ao inserir notícia");
-        }        
+        }
     }
 
     public function atualizar(TipoUsuario $tipoUsuario, int $usuarioId, Noticia $noticia): void
