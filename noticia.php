@@ -41,7 +41,7 @@ require_once __DIR__ . '/includes/cabecalho.php';
                 <time datetime="<?= Utils::escaparHtml($dadosNoticia['data']) ?>">
                     <?= Utils::escaparHtml(date('d/m/Y', strtotime($dadosNoticia['data']))) ?>
                 </time> -
-                <span><?= Utils::escaparHtml($dadosNoticia['autor'] ?? 'Autor não informado') ?></span>
+                <span><?= Utils::escaparHtml($dadosNoticia['autor'] ?? 'Equipe Microblog') ?></span>
             </p>
             <img src="images/<?= Utils::escaparHtml($dadosNoticia['imagem']) ?>" alt="" class="float-start pe-2 img-fluid">
             <p class="ajusta-texto"><?= nl2br(Utils::escaparHtml($dadosNoticia['texto'])) ?></p>

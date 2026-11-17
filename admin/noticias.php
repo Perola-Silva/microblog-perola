@@ -65,7 +65,7 @@ require_once __DIR__ . '/../includes/cabecalho-admin.php';
                                 <td><?= Utils::escaparHtml($itemNoticia['titulo']) ?></td>
                                 <td><?= Utils::escaparHtml(Utils::formataData($itemNoticia['data'])) ?></td>
                                 <?php if ($ehAdmin): ?>
-                                    <td><?= Utils::escaparHtml($itemNoticia['autor'] ?? '') ?></td>
+                                    <td><?= Utils::escaparHtml($itemNoticia['autor'] ?? 'Usuário deletado') ?></td>
                                 <?php endif; ?>
                                 <td class="text-center"><?= Utils::escaparHtml($itemNoticia['destaque']) ?></td>
                                 <td class="text-center">
