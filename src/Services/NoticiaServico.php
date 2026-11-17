@@ -53,6 +53,24 @@ final class NoticiaServico
         }
     }
 
+    public function listarDestaques(): array
+    {
+        $sql = "SELECT id, titulo, resumo, imagem
+                FROM noticias
+                WHERE destaque = :destaque
+                ORDER BY data DESC";
+
+        try {
+            $consulta = $this->conexao->prepare($sql);
+            $consulta->bindValue(":destaque", "sim");
+            $consulta->execute();
+            return $consulta->fetchAll();
+        } catch (PDOException $e) {
+            Utils::registrarLog($e);
+            throw new Exception("Erro ao listar notícias em destaque");
+        }
+    }
+
     public function buscarPorId(TipoUsuario $tipoUsuario, int $usuarioId, int $noticiaId): ?array
     {
         $sql = "SELECT noticias.id, noticias.data, noticias.titulo, noticias.texto,
