@@ -1,3 +1,22 @@
+<?php
+
+use Microblog\Helpers\Utils;
+use Microblog\Services\CategoriaServico;
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$listaDeCategorias = [];
+$erroAoCarregarCategorias = false;
+
+try {
+  $categoriaServico = new CategoriaServico();
+  $listaDeCategorias = $categoriaServico->listarTodos();
+} catch (Throwable $e) {
+  Utils::registrarLog($e);
+  $erroAoCarregarCategorias = true;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br" class="h-100">
 
@@ -28,10 +47,19 @@
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Categorias</a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-
-                <li><a class="dropdown-item" href="noticias-por-categoria.php?id=1">Desenvolvimento</a></li>
-                <li><a class="dropdown-item" href="noticias-por-categoria.php?id=2">Tecnologia</a></li>
-                
+                <?php if ($erroAoCarregarCategorias): ?>
+                  <li><span class="dropdown-item-text text-danger">Não foi possível carregar as categorias.</span></li>
+                <?php elseif ($listaDeCategorias === []): ?>
+                  <li><span class="dropdown-item-text">Nenhuma categoria cadastrada.</span></li>
+                <?php else: ?>
+                  <?php foreach ($listaDeCategorias as $categoria): ?>
+                    <li>
+                      <a class="dropdown-item" href="noticias-por-categoria.php?id=<?= Utils::escaparHtml($categoria['id']) ?>">
+                        <?= Utils::escaparHtml($categoria['nome']) ?>
+                      </a>
+                    </li>
+                  <?php endforeach; ?>
+                <?php endif; ?>
               </ul>
             </li>
             <li class="nav-item"><a class="nav-link" href="admin/index.php"><i class="bi bi-lock-fill"></i> Área administrativa</a></li>
