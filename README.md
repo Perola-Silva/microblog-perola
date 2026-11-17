@@ -57,7 +57,7 @@ Na versão inicial do projeto:
 ## Requisitos e configuração do ambiente
 
 ### 1. Servidor e PHP
-- **PHP 8.5 ou superior** com as extensões `pdo_mysql`, `mbstring` e `fileinfo` habilitadas no `php.ini`.
+- **PHP 8.5 ou superior** com as extensões `pdo_mysql` e `mbstring` habilitadas no `php.ini`. A extensão `fileinfo` é recomendada para validar imagens; sem ela, o upload usa `getimagesize()` como alternativa.
 - Servidor web local (PHP Server, ou Apache via XAMPP, ou WampServer ou similar) e **MySQL / MariaDB**.
 
 ### 2. Banco de dados

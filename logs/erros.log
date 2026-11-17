@@ -1,0 +1,18 @@
+[2026-11-17 09:47:08]
+Arquivo: C:\backend\microblog_perola\microblog-perola\src\Helpers\Utils.php
+Linha: 142
+Mensagem: Call to undefined function Microblog\Helpers\mime_content_type()
+
+[2026-11-17 09:47:32]
+Arquivo: C:\backend\microblog_perola\microblog-perola\src\Helpers\Utils.php
+Linha: 142
+Mensagem: Call to undefined function Microblog\Helpers\mime_content_type()
+
+[2026-11-17 09:47:53]
+Arquivo: C:\backend\microblog_perola\microblog-perola\src\Helpers\Utils.php
+Linha: 142
+Mensagem: Call to undefined function Microblog\Helpers\mime_content_type()[2026-11-17 09:51:39]
+Arquivo: C:\backend\microblog_perola\microblog-perola\src\Helpers\Utils.php
+Linha: 142
+Mensagem: Call to undefined function Microblog\Helpers\mime_content_type()
+

@@ -9,7 +9,7 @@ Microblog é um portal didático de notícias feito em PHP, com páginas públic
 ## Ambiente e execução
 
 - Projeto preparado para execução local com Apache (por exemplo, XAMPP), PHP e MySQL/MariaDB.
-- O `README.md` documenta PHP 8.5+ e as extensões `pdo_mysql`, `mbstring` e `fileinfo`.
+- O `README.md` documenta PHP 8.5+, as extensões obrigatórias `pdo_mysql` e `mbstring`, e `fileinfo` como recomendada (o upload de imagens usa `getimagesize()` como alternativa se ela estiver ausente).
 - O autoload PSR-4 está configurado em `composer.json`: `Microblog\` aponta para `src/`.
 - As páginas carregam classes com `vendor/autoload.php`. Depois de alterar o mapeamento do Composer, regenere o autoload com `composer dump-autoload`. Não edite arquivos gerados em `vendor/` manualmente.
 - A conexão é configurada em `src/Database/ConexaoBD.php`; ela usa PDO para o banco `microblog_2026`. Ajuste as configurações locais nesse arquivo conforme necessário.

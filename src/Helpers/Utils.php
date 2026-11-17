@@ -139,7 +139,15 @@ class Utils
             throw new InvalidArgumentException("A imagem deve ter no máximo 2 MB.");
         }
 
-        $formatoDoArquivoEnviado = mime_content_type($arquivo["tmp_name"]);
+        if (function_exists('mime_content_type')) {
+            $formatoDoArquivoEnviado = mime_content_type($arquivo["tmp_name"]);
+        } else {
+            $informacoesImagem = @getimagesize($arquivo["tmp_name"]);
+            $formatoDoArquivoEnviado = is_array($informacoesImagem)
+                ? ($informacoesImagem["mime"] ?? "")
+                : "";
+        }
+
         $extensoesPorFormato = [
             "image/jpeg" => ["jpg", "jpeg"],
             "image/gif" => ["gif"],
