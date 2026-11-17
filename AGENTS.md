@@ -78,7 +78,7 @@ As referências da notícia para usuário e categoria aceitam `NULL`; as chaves 
 - `Noticia` representa título, texto, resumo, imagem, destaque, autor, categoria e, opcionalmente, ID e data. `Validacoes` valida campos relacionados a notícias; `Utils::upload()` valida e salva imagens em `images/`.
 - O cadastro administrativo de notícias carrega categorias, valida os dados e faz upload da imagem.
 - `NoticiaServico::buscarPorId()` carrega uma notícia pelo ID para administradores e restringe editores às próprias notícias; `NoticiaServico::atualizar()` grava os campos editáveis da notícia usando seu ID; `NoticiaServico::excluir()` executa a exclusão por ID. `admin/noticia-atualiza.php` valida e salva o formulário, preservando a imagem atual quando não há novo upload. `admin/noticia-exclui.php` valida o ID e a permissão do usuário antes de excluir.
-- As páginas públicas `index.php`, `noticia.php`, `noticias-por-categoria.php`, `resultados.php` e o bloco `includes/todas.php` ainda exibem conteúdo provisório. `js/busca.js` também não tem integração funcional de busca.
+- As páginas públicas `index.php`, `noticia.php`, `noticias-por-categoria.php` e o bloco `includes/todas.php` ainda exibem conteúdo provisório. `resultados.php` e `js/busca.js` implementam sugestões de busca ao digitar; `NoticiaServico::buscarPorTermo()` pesquisa título, resumo e texto.
 - `admin/js/confirm.js` implementa confirmação visual para links `.excluir`; isso não substitui validação/autorização no servidor.
 
 ## Cuidados para mudanças

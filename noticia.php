@@ -44,7 +44,7 @@ require_once __DIR__ . '/includes/cabecalho.php';
                 <span><?= Utils::escaparHtml($dadosNoticia['autor'] ?? 'Equipe Microblog') ?></span>
             </p>
             <img src="images/<?= Utils::escaparHtml($dadosNoticia['imagem']) ?>" alt="" class="float-start pe-2 img-fluid">
-            <p class="ajusta-texto"><?= nl2br(Utils::escaparHtml($dadosNoticia['texto'])) ?></p>
+            <p class="ajusta-texto"><?= Utils::escaparHtml($dadosNoticia['texto']) ?></p>
         </article>
     <?php endif; ?>
 </div>
