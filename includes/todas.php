@@ -1,3 +1,22 @@
+<?php
+
+use Microblog\Helpers\Utils;
+use Microblog\Services\NoticiaServico;
+
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$mensagemErro = "";
+$listaDeNoticias = [];
+
+try {
+    $noticiaServico = new NoticiaServico();
+    $listaDeNoticias = $noticiaServico->listarTodasPublicas();
+} catch (Throwable $e) {
+    Utils::registrarLog($e);
+    $mensagemErro = "Não foi possível carregar as notícias.";
+}
+?>
+
 <hr class="my-5 w-50 mx-auto">
 
 <div class="row my-1">
@@ -5,14 +24,25 @@
         <div class="list-group">
             <h2 class="fs-6 text-center text-muted">Todas as notícias</h2>
 
-            <a href="noticia.php?id=1" class="list-group-item list-group-item-action">
-                <h3 class="fs-6"><time datetime="2026-01-01">01/01/2026</time> - Título provisório da notícia</h3>
-                <p>Resumo provisório para apresentar o formato da lista.</p>
-            </a>
-            <a href="noticia.php?id=2" class="list-group-item list-group-item-action">
-                <h3 class="fs-6"><time datetime="2026-01-02">02/01/2026</time> - Outro título provisório</h3>
-                <p>Outro resumo provisório para apresentar o formato da lista.</p>
-            </a>
+            <?php if ($mensagemErro !== ""): ?>
+                <div class="alert alert-danger text-center">
+                    <?= Utils::escaparHtml($mensagemErro) ?>
+                </div>
+            <?php elseif ($listaDeNoticias === []): ?>
+                <p class="text-center text-muted">Nenhuma notícia disponível.</p>
+            <?php else: ?>
+                <?php foreach ($listaDeNoticias as $noticia): ?>
+                    <a href="noticia.php?id=<?= Utils::escaparHtml($noticia['id']) ?>" class="list-group-item list-group-item-action">
+                        <h3 class="fs-6">
+                            <time datetime="<?= Utils::escaparHtml($noticia['data']) ?>">
+                                <?= Utils::escaparHtml(Utils::formataData($noticia['data'])) ?>
+                            </time>
+                            - <?= Utils::escaparHtml($noticia['titulo']) ?>
+                        </h3>
+                        <p><?= Utils::escaparHtml($noticia['resumo']) ?></p>
+                    </a>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
 </div>

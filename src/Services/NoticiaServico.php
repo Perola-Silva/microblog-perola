@@ -71,6 +71,21 @@ final class NoticiaServico
         }
     }
 
+    public function listarTodasPublicas(): array
+    {
+        $sql = "SELECT id, data, titulo, resumo
+                FROM noticias
+                ORDER BY data DESC";
+
+        try {
+            $consulta = $this->conexao->query($sql);
+            return $consulta->fetchAll();
+        } catch (PDOException $e) {
+            Utils::registrarLog($e);
+            throw new Exception("Erro ao listar notícias");
+        }
+    }
+
     public function buscarPorId(TipoUsuario $tipoUsuario, int $usuarioId, int $noticiaId): ?array
     {
         $sql = "SELECT noticias.id, noticias.data, noticias.titulo, noticias.texto,
